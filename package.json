@@ -1,6 +1,6 @@
 {
   "name": "@developerjamey/langchain-discord",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Discord chat log loader for LangChainJS",
   "main": "dist/discord_loader.js",
   "types": "dist/discord_loader.d.ts",
