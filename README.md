@@ -47,9 +47,11 @@ console.log(docs[0]);
 ## Usage
 ### 1. As a LangChain Document Loader
 ```typescript
+import "dotenv/config";
 import { DiscordChatLoader } from "@developerjamey/langchain-discord";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { Chroma } from "@langchain/community/vectorstores/chroma";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 const chatLog = [
   { ID: "UserA", content: "What's up?", timestamp: "2025-10-19T10:00:00Z" },
@@ -59,55 +61,35 @@ const chatLog = [
 const loader = new DiscordChatLoader(chatLog);
 const docs = await loader.load();
 
-const vectorStore = await MemoryVectorStore.fromDocuments(
-  docs,
-  new OpenAIEmbeddings()
+const splitter = new RecursiveCharacterTextSplitter({
+  chunkSize: 200,
+  chunkOverlap: 50,
+});
+const splitDocs = await splitter.splitDocuments(docs);
+
+const embeddings = new OpenAIEmbeddings({
+  model: "text-embedding-3-large",
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const vectorStore = await Chroma.fromDocuments(
+  splitDocs,
+  embeddings,
+  {
+    collectionName: "discord_chat_collection",
+    url: "http://localhost:8000",
+  }
 );
 
 const result = await vectorStore.similaritySearch("LangChain", 2);
-console.log(result);
+console.log("🔍 Similarity Search Results:");
+for (const r of result) {
+  console.log(`→ Content: ${r.pageContent}`);
+  console.log(`  Metadata:`, r.metadata);
+}
 ```
 
-### 2. With an AI Agent
-```typescript
-import { ChatOpenAI } from "@langchain/openai";
-import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { DiscordChatLoader } from "@developerjamey/langchain-discord";
-
-const model = new ChatOpenAI({ model: "gpt-4o-mini", temperature: 0 });
-
-const chatLog = [
-  { ID: "User123", content: "I’m studying AI.", timestamp: "2025-10-19T10:00:00Z" },
-  { ID: "User456", content: "That’s awesome!", timestamp: "2025-10-19T10:01:00Z" },
-];
-
-const loader = new DiscordChatLoader(chatLog);
-const docs = await loader.load();
-
-const tools = [
-  {
-    name: "discord_memory_search",
-    description: "Search through Discord chat logs for context",
-    func: async (query: string) =>
-      docs.filter((d) => d.metadata.content.includes(query)),
-  },
-];
-
-const agent = createReactAgent({ llm: model, tools });
-
-const result = await agent.invoke({
-  messages: [
-    {
-      role: "user",
-      content: "Who mentioned studying AI?",
-    },
-  ],
-});
-
-console.log(result.messages[result.messages.length - 1].content);
-```
-
-### 3. With a Custom User ID Column
+### 2. With a Custom User ID Column
 ```typescript
 const chatLog = [
   { user_id: "JohnDoe", text: "Good morning!", time: "2025-10-19T09:00:00Z" },
