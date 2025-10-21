@@ -1,0 +1,27 @@
+{
+  "name": "@developerjamey/langchain-discord",
+  "version": "0.0.3",
+  "description": "Discord chat log loader for LangChainJS",
+  "main": "dist/discord_loader.js",
+  "types": "dist/discord_loader.d.ts",
+  "files": ["dist"],
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "test": "jest --passWithNoTests"
+  },
+  "peerDependencies": {
+    "@langchain/core": ">=0.2.0"
+  },
+  "devDependencies": {
+    "@langchain/core": "^0.2.0",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.4.0"
+  },
+  "author": "Jamey (김준환)",
+  "license": "MIT",
+  "keywords": ["discord", "langchain", "LangChainJS"]
+}
