@@ -3,7 +3,7 @@ import { Document } from "@langchain/core/documents";
 
 /**
  * DiscordChatLoader
- * 
+ *
  * Load Discord chat logs from an array of records (like a Pandas DataFrame).
  */
 export class DiscordChatLoader extends BaseDocumentLoader {
@@ -21,7 +21,7 @@ export class DiscordChatLoader extends BaseDocumentLoader {
 
     if (!Array.isArray(chatLog)) {
       throw new Error(
-        `Expected chatLog to be an array of objects, got ${typeof chatLog}`
+        `Expected chatLog to be an array of objects, got ${typeof chatLog}`,
       );
     }
 
@@ -42,7 +42,7 @@ export class DiscordChatLoader extends BaseDocumentLoader {
 
       if (userId === undefined) {
         throw new Error(
-          `Row missing user_id_col "${this.userIdCol}": ${JSON.stringify(row)}`
+          `Row missing user_id_col "${this.userIdCol}": ${JSON.stringify(row)}`,
         );
       }
 
@@ -53,7 +53,7 @@ export class DiscordChatLoader extends BaseDocumentLoader {
         new Document({
           pageContent: String(userId),
           metadata,
-        })
+        }),
       );
     }
 
