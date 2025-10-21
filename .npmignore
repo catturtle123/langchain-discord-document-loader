@@ -1,0 +1,22 @@
+# Source files
+src/
+tsconfig.json
+eslint.config.js
+.prettierrc
+
+# Tests
+test/
+jest.config.js
+*.test.ts
+*.spec.ts
+
+# Build artifacts
+*.tsbuildinfo
+.DS_Store
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
