@@ -21,6 +21,10 @@
     "ts-jest": "^29.4.5",
     "typescript": "^5.4.0"
   },
+  "bugs": {
+    "url": "https://github.com/catturtle123/langchain-discord-document-loader/issues"
+  },
+  "homepage": "https://github.com/catturtle123/langchain-discord-document-loader#readme",
   "author": "Jamey (김준환)",
   "license": "MIT",
   "keywords": ["discord", "langchain", "LangChainJS"]
